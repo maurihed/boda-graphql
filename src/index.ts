@@ -5,9 +5,11 @@ import { buildSchema } from "type-graphql";
 import { FamilyResolver } from "./resolvers/familyResolver";
 import { createConnection } from "typeorm";
 import { GuestResolver } from "./resolvers/guestResolver";
+import compression from "compression";
 
 (async () => {
   const app = express();
+  app.use(compression());
   app.get('/', (_req, res) => res.send('say hello'));
 
   await createConnection();
