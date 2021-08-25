@@ -10,7 +10,7 @@ import compression from "compression";
 (async () => {
   const app = express();
   app.use(compression());
-  app.get('/', (_req, res) => res.send('say hello'));
+  app.get('/', (_req, res) => res.send('I\'m working'));
 
   await createConnection();
 

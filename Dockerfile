@@ -1,15 +1,17 @@
 FROM node:14
 
-RUN npm install yarn -g
+WORKDIR /usr/src/app
 
-WORKDIR /app
+COPY package*.json ./
 
-COPY . /app
+RUN npm install -g ts-node
 
-RUN yarn install --production=true
+RUN npm ci --only=production
+
+COPY . .
 
 EXPOSE 4000
 
-CMD ["yarn", "build"]
+CMD ["npm", "run", "build"]
 
-CMD ["yarn", 'start:prod']
+CMD ["npm", "run", "start:prod"]
