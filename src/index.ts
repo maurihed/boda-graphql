@@ -6,10 +6,12 @@ import { FamilyResolver } from "./resolvers/familyResolver";
 import { createConnection } from "typeorm";
 import { GuestResolver } from "./resolvers/guestResolver";
 import compression from "compression";
+import cors from "cors";
 
 (async () => {
   const app = express();
   app.use(compression());
+  app.use(cors());
   app.get('/', (_req, res) => res.send('I\'m working'));
 
   await createConnection();
