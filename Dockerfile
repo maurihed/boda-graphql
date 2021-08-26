@@ -1,13 +1,13 @@
 FROM node:14
 
-VOLUME [/usr/src/app]
+WORKDIR /app
 
-WORKDIR /usr/src/app
+COPY . /app
+
+RUN npm install
+
+RUN npm run build
 
 EXPOSE 4000
-
-RUN npm run install
-
-CMD ["npm", "run", "build"]
 
 CMD ["npm", "run", "start:prod"]
