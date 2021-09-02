@@ -3,7 +3,7 @@
    "host": "74.208.128.237",
    "port": 5432,
    "username": "postgres",
-   "password": "olv",
+   "password": "1150",
    "database": "boda",
    "synchronize": true,
    "logging": false,

@@ -1,7 +1,7 @@
-import { GuestType } from "../enums/guests.enum";
-import { Field, InputType, Int, ObjectType } from "type-graphql";
 import { BaseEntity, Column, CreateDateColumn, Entity, ManyToOne, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
+import { Field, InputType, Int, ObjectType } from "type-graphql";
 import { Family } from "./Family";
+import { GuestType } from "../enums/guests.enum";
 
 @ObjectType()
 @Entity('guests')

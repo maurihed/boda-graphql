@@ -26,7 +26,8 @@
    "scripts": {
       "start": "nodemon --exec ts-node src/index.ts",
       "build": "tsc -p .",
-      "start:prod": "ts-node dist/index.js"
+      "prod": "ts-node src/index.ts",
+      "start:prod": "rm -rf dist && tsc && node --experimental-specifier-resolution=node ./dist/index.js"
    },
    "optionalDependencies": {
       "fsevents": "^2.3.2"
