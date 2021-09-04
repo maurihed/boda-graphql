@@ -1,4 +1,5 @@
 import {Arg, Mutation, Query, Resolver, Int} from "type-graphql";
+import { Guest, GuestInputType } from "../entity/Guest";
 import { Family, FamilyInputType } from "../entity/Family";
 
 @Resolver()
@@ -14,10 +15,14 @@ export class FamilyResolver {
 
   @Mutation(() => Boolean)
   async newFamily(
-    @Arg('name') name: string
+    @Arg('name') name: string,
+    @Arg('guests', () => [GuestInputType], {nullable: true}) guests?: GuestInputType[]
   ) {
     try {
-      await Family.insert({ name })
+      const {identifiers: [{id: familyId}]} = await Family.insert({ name });
+      if (guests?.length) {
+        guests.forEach((guest: GuestInputType) => Guest.insert({...guest, familyId}));
+      }
       return true;
     } catch(err) {
       console.error(err);
