@@ -13,7 +13,7 @@ export class FamilyResolver {
   }
 
 
-  @Mutation(() => Boolean)
+  @Mutation(() => Family)
   async newFamily(
     @Arg('name') name: string,
     @Arg('guests', () => [GuestInputType], {nullable: true}) guests?: GuestInputType[]
@@ -23,10 +23,19 @@ export class FamilyResolver {
       if (guests?.length) {
         guests.forEach((guest: GuestInputType) => Guest.insert({...guest, familyId}));
       }
-      return true;
+
+      return await Family.findOne(familyId,
+        {
+          relations: ['guests'],
+          loadRelationIds: false,
+        }
+      );
     } catch(err) {
       console.error(err);
-      return false
+      return {
+        hasError: true,
+        error: err,
+      }
     }
   }
 
