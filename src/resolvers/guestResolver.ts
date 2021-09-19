@@ -10,42 +10,48 @@ export class GuestResolver {
   }
 
 
-  @Mutation(() => Boolean)
+  @Mutation(() => Guest)
   async newGuest(
     @Arg('name') name: string,
     @Arg('type', () => GuestType) type: GuestType,
-    @Arg('age', () => Int) age: number,
     @Arg('familyId', () => Int) familyId: number,
+    @Arg('age', () => Int, { defaultValue: 18, nullable: true }) age?: number,
   ) {
     try {
-      console.log(type);
-      await Guest.insert({ name, type, age, familyId })
-      return true;
+      const { identifiers: [{ id: guestId }] } = await Guest.insert({ name, type, age, familyId })
+      return await Guest.findOneOrFail(guestId, { relations: ['family'] });
     } catch(err) {
       console.error(err);
-      return false
+      return {
+        hasError: true,
+        error: err
+      };
     }
   }
 
-  @Mutation(() => Boolean)
-  updateGuest(
+  @Mutation(() => Guest)
+  async updateGuest(
     @Arg('guest', () => GuestInputType) guest: GuestInputType, 
     @Arg('guestId', () => Int) guestId: number
     ) {
       try {
-        Guest.update(guestId, guest);
-        return true;
+        console.log(guest);
+        await Guest.update(guestId, guest);
+        return await Guest.findOneOrFail(guestId, { relations: ['family'] });
       } catch (err) {
         console.error(err)
-        return false;
+        return {
+          hasError: true,
+          error: err
+        };
       }
   }
 
-  @Mutation(() => Boolean)
+  @Mutation(() => Int)
   deleteGuest(@Arg('guestId', () => Int) guestId: number) {
     try {
       Guest.delete(guestId);
-      return true;
+      return guestId;
     } catch (err) {
       console.error(err);
       return false;

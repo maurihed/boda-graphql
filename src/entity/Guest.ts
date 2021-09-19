@@ -18,15 +18,15 @@ export class Guest extends BaseEntity {
   @Column('text')
   type: GuestType;
 
-  @Field(() => Int)
-  @Column('int')
+  @Field(() => Int, { nullable: true })
+  @Column('int', { default: 18 })
   age: number;
 
   @Field(() => Int)
   @Column('int')
   familyId: number;
 
-  @Field(() => Family, {nullable: true})
+  @Field(() => Family, { nullable: true })
   @ManyToOne(() => Family, (family: Family) => family.guests, { onDelete: "CASCADE"})
   family: Family;
 
