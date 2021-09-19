@@ -1,12 +1,12 @@
 import "reflect-metadata";
-import express from "express";
-import {ApolloServer} from "apollo-server-express";
-import { buildSchema } from "type-graphql";
-import { FamilyResolver } from "./resolvers/familyResolver";
-import { createConnection } from "typeorm";
-import { GuestResolver } from "./resolvers/guestResolver";
-import compression from "compression";
 import cors from "cors";
+import express from "express";
+import compression from "compression";
+import { createConnection } from "typeorm";
+import { buildSchema } from "type-graphql";
+import {ApolloServer} from "apollo-server-express";
+import { FamilyResolver } from "./resolvers/familyResolver";
+import { GuestResolver } from "./resolvers/guestResolver";
 
 (async () => {
   const app = express();

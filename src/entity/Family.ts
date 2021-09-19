@@ -1,6 +1,7 @@
 import { Field, InputType, Int, ObjectType } from "type-graphql";
 import { BaseEntity, Column, CreateDateColumn, Entity, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
 import { Guest } from "./Guest";
+import { FamilySide } from "../enums/familySide.enum";
 
 @ObjectType()
 @Entity('families')
@@ -17,6 +18,9 @@ export class Family extends BaseEntity {
   @OneToMany(() => Guest, (guest: Guest) => guest.family)
   guests?: Guest[];
 
+  @Field(() => FamilySide, { defaultValue: FamilySide.BRIDE })
+  @Column("text", { default: FamilySide.GROOM })
+  familySide: FamilySide;
   /**
    * DB insert time.
    */
@@ -34,4 +38,7 @@ export class Family extends BaseEntity {
 export class FamilyInputType {
   @Field()
   name: string;
+
+  @Field(() => FamilySide)
+  familySide: FamilySide;
 }

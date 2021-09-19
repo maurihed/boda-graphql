@@ -27,7 +27,7 @@ export class Guest extends BaseEntity {
   familyId: number;
 
   @Field(() => Family, {nullable: true})
-  @ManyToOne(() => Family, (family: Family) => family.guests)
+  @ManyToOne(() => Family, (family: Family) => family.guests, { onDelete: "CASCADE"})
   family: Family;
 
   @CreateDateColumn({ type: "timestamp", default: () => "CURRENT_TIMESTAMP(6)" })

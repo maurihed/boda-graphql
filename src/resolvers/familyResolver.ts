@@ -1,6 +1,7 @@
 import {Arg, Mutation, Query, Resolver, Int} from "type-graphql";
 import { Guest, GuestInputType } from "../entity/Guest";
 import { Family, FamilyInputType } from "../entity/Family";
+import { FamilySide } from "../enums/familySide.enum";
 
 @Resolver()
 export class FamilyResolver {
@@ -16,10 +17,11 @@ export class FamilyResolver {
   @Mutation(() => Family)
   async newFamily(
     @Arg('name') name: string,
+    @Arg('familySide', () => FamilySide) familySide: FamilySide,
     @Arg('guests', () => [GuestInputType], {nullable: true}) guests?: GuestInputType[]
   ) {
     try {
-      const {identifiers: [{id: familyId}]} = await Family.insert({ name });
+      const {identifiers: [{id: familyId}]} = await Family.insert({ name, familySide });
       if (guests?.length) {
         guests.forEach((guest: GuestInputType) => Guest.insert({...guest, familyId}));
       }
@@ -35,29 +37,37 @@ export class FamilyResolver {
       return {
         hasError: true,
         error: err,
-      }
+      };
     }
   }
 
-  @Mutation(() => Boolean)
+  @Mutation(() => Family)
   async updateFamily(
     @Arg('familyId', () => Int) familyId: number,
     @Arg('family') family: FamilyInputType
   ){
     try {
-      Family.update(familyId, family);
-      return true;
-    } catch (err) {
+      await Family.update(familyId, family);
+      return await Family.findOne(familyId,
+        {
+          relations: ['guests'],
+          loadRelationIds: false,
+        }
+      );
+    } catch(err) {
       console.error(err);
-      return false
+      return {
+        hasError: true,
+        error: err,
+      };
     }
   }
 
-  @Mutation(() => Boolean)
+  @Mutation(() => Int)
   async deleteFamily (@Arg('familyId', () => Int) familyId: number) {
     try {
       Family.delete(familyId);
-      return true;
+      return familyId;
     } catch (error) {
       console.error(error);
       return false;
